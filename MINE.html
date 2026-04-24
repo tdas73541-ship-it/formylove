@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Anannya ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    background: radial-gradient(circle at top, #1a1a2e, #000);
+    color:white;
+    font-family:'Poppins',sans-serif;
+    overflow:hidden;
+}
+
+/* Stars */
+.stars{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:url('https://i.ibb.co/6XGQb7S/stars.png');
+    opacity:0.4;
+    animation:moveStars 80s linear infinite;
+    z-index:-1;
+}
+@keyframes moveStars{
+    to{background-position:10000px 5000px;}
+}
+
+/* Container */
+.container{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+}
+
+/* Name */
+.name{
+    font-family:'Great Vibes',cursive;
+    font-size:75px;
+}
+
+/* Text */
+.text{
+    font-size:34px;
+    margin-top:20px;
+    min-height:90px;
+}
+
+/* GIF */
+.gif{
+    width:260px;
+    margin-top:25px;
+    border-radius:20px;
+}
+
+/* Button */
+button{
+    margin-top:35px;
+    padding:15px 45px;
+    font-size:20px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(45deg,#ff4b7d,#ff758c);
+    color:white;
+    cursor:pointer;
+}
+
+/* Hearts */
+.heart{
+    position:fixed;
+    bottom:-20px;
+    animation:float 6s linear infinite;
+}
+@keyframes float{
+    to{transform:translateY(-100vh);opacity:0;}
+}
+
+/* Popup */
+#popup{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    justify-content:center;
+    align-items:center;
+}
+.popup-box{
+    background:white;
+    color:#ff4b7d;
+    padding:30px;
+    border-radius:20px;
+    font-size:26px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<div class="container">
+    <h1 class="name">Anannya ❤️</h1>
+
+    <div id="text" class="text">Click karo na… 🥺</div>
+
+    <img id="gif" class="gif" src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
+
+    <button onclick="next()">Next ➜</button>
+</div>
+
+<!-- Popup -->
+<div id="popup">
+    <div class="popup-box">
+        Thank you nubri ❤️🥺<br><br>
+        Ab toh gussa khatam? 😏❤️
+    </div>
+</div>
+
+<!-- Music -->
+<audio id="bgMusic" src="sahiba.mp3" loop preload="auto"></audio>
+
+<script>
+let steps = [
+    {text:"Sorry 🥺", gif:"https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"},
+    {text:"Miss you ❤️", gif:"https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"},
+    {text:"Tum important ho 💖", gif:"https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif"},
+    {text:"Gussa mat ho na 🥺", gif:"https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif"},
+    {text:"Ek chance de do 🙏", gif:"https://media.giphy.com/media/ASd0Ukj0y3qMM/giphy.gif"},
+    {text:"Love you Anannya ❤️🥺", gif:"https://media.giphy.com/media/3oriO6qJiXajN0TyDu/giphy.gif"},
+    {text:"Agar tumhe thodi si bhi smile aayi ho… toh reply kar dena ❤️🥺", gif:"https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif"}
+];
+
+let i = 0;
+let musicStarted = false;
+
+// typing effect
+function typeText(text, element, speed=40){
+    element.innerHTML = "";
+    let j = 0;
+    let interval = setInterval(()=>{
+        element.innerHTML += text[j];
+        j++;
+        if(j >= text.length) clearInterval(interval);
+    }, speed);
+}
+
+// music fade
+function startMusic(){
+    const music = document.getElementById("bgMusic");
+
+    music.muted = true;
+    music.play().then(()=>{
+        music.muted = false;
+        let vol = 0;
+        music.volume = 0;
+
+        let fade = setInterval(()=>{
+            if(vol < 0.3){
+                vol += 0.02;
+                music.volume = vol;
+            } else clearInterval(fade);
+        },200);
+    }).catch(()=>{
+        console.log("Click again");
+    });
+}
+
+// next
+function next(){
+    let text = document.getElementById("text");
+    let gif = document.getElementById("gif");
+
+    if(!musicStarted){
+        startMusic();
+        setInterval(createHeart,200);
+        musicStarted = true;
+    }
+
+    if(i < steps.length){
+        if(i === steps.length - 1){
+            typeText(steps[i].text, text);
+        } else {
+            text.innerHTML = steps[i].text;
+        }
+        gif.src = steps[i].gif;
+        i++;
+    } else {
+        document.getElementById("popup").style.display = "flex";
+    }
+}
+
+// hearts
+function createHeart(){
+    let h = document.createElement("div");
+    h.classList.add("heart");
+    h.innerHTML = ["❤️","💖","💕"][Math.floor(Math.random()*3)];
+    h.style.left = Math.random()*100+"vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+}
+</script>
+
+</body>
+</html>
